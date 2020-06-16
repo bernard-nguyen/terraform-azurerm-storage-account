@@ -31,17 +31,17 @@ variable "soft_delete_retention" {
   default     = 31
 }
 
-variable "enable_advanced_threat_protection" {
+/*variable "enable_advanced_threat_protection" {
   description = "Boolean flag which controls if advanced threat protection is enabled."
   type        = bool
   default     = false
-}
+}*/
 
-variable "network_rules" {
+/*variable "network_rules" {
   description = "Network rules restricing access to the storage account."
   type        = object({ ip_rules = list(string), subnet_ids = list(string), bypass = list(string) })
   default     = null
-}
+}*/
 
 variable "containers" {
   description = "List of containers to create and their access levels."
@@ -49,11 +49,6 @@ variable "containers" {
   default     = []
 }
 
-variable "events" {
-  description = "List of event subscriptions. See documentation for format description."
-  type        = list(any)
-  default     = []
-}
 
 variable "tags" {
   description = "Tags to apply to all resources created."
@@ -61,8 +56,8 @@ variable "tags" {
   default     = {}
 }
 
-variable "lifecycles" {
+/*variable "lifecycles" {
   description = "List of lifecycle delete"
   type        = list(object({ prefix_match = set(string), delete_after_days = number }))
   default     = []
-}
+}*/

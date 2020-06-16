@@ -1,41 +1,29 @@
-//terraform {
-  //required_version = ">= 0.12.6"
-//}
+/*terraform {
+  required_version = ">= 0.12.6"
+}
 
-//provider azurerm {
- // version = "~> 2.12.0"
- // features {}
-//}
+provider azurerm {
+  version = "~> 2.12.0"
+  features {}
+}*/
 
 
 locals {
-  default_event_rule = {
-    event_delivery_schema = null
-    topic_name            = null
-    labels                = null
-    filters               = null
-    eventhub_id           = null
-    service_bus_topic_id  = null
-    service_bus_queue_id  = null
-    included_event_types  = null
-  }
-
-  merged_events = [for event in var.events : merge(local.default_event_rule, event)]
 }
 
-resource "azurerm_resource_group" "storage" {
+/*resource "azurerm_resource_group" "storage" {
   name     = var.resource_group_name
   location = var.location
 
   tags = var.tags
-}
+} */
 
 
 
 resource "azurerm_storage_account" "storage" {
   name                      = var.name
-  resource_group_name       = azurerm_resource_group.storage.name
-  location                  = azurerm_resource_group.storage.location
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
   account_kind              = "StorageV2"
   account_tier              = var.account_tier
   account_replication_type  = var.account_replication_type
@@ -48,7 +36,7 @@ resource "azurerm_storage_account" "storage" {
     }
   }
 
-  dynamic "network_rules" {
+  /*dynamic "network_rules" {
     for_each = var.network_rules != null ? ["true"] : []
     content {
       default_action             = "Deny"
@@ -56,15 +44,15 @@ resource "azurerm_storage_account" "storage" {
       virtual_network_subnet_ids = var.network_rules.subnet_ids
       bypass                     = var.network_rules.bypass
     }
-  }
+  }*/
 
   tags = var.tags
 }
 
-resource "azurerm_advanced_threat_protection" "threat_protection" {
+/*resource "azurerm_advanced_threat_protection" "threat_protection" {
   target_resource_id = azurerm_storage_account.storage.id
   enabled            = var.enable_advanced_threat_protection
-}
+}*/
 
 resource "azurerm_storage_container" "storage" {
   count                 = length(var.containers)
@@ -75,7 +63,7 @@ resource "azurerm_storage_container" "storage" {
 
 
 
-resource "azurerm_storage_management_policy" "storage" {
+/*resource "azurerm_storage_management_policy" "storage" {
   count = length(var.lifecycles) == 0 ? 0 : 1
 
   storage_account_id = azurerm_storage_account.storage.id
@@ -97,4 +85,4 @@ resource "azurerm_storage_management_policy" "storage" {
       }
     }
   }
-}
+}*/
