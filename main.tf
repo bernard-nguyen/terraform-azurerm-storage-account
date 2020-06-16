@@ -7,9 +7,6 @@ provider azurerm {
   features {}
 }
 
-provider random {
-  version = "~> 2.2"
-}
 
 locals {
   default_event_rule = {
@@ -33,14 +30,10 @@ resource "azurerm_resource_group" "storage" {
   tags = var.tags
 }
 
-resource "random_string" "unique" {
-  length  = 6
-  special = false
-  upper   = false
-}
+
 
 resource "azurerm_storage_account" "storage" {
-  name                      = format("%s%ssa", lower(replace(var.name, "/[[:^alnum:]]/", "")), random_string.unique.result)
+  name                      = var.name
   resource_group_name       = azurerm_resource_group.storage.name
   location                  = azurerm_resource_group.storage.location
   account_kind              = "StorageV2"
