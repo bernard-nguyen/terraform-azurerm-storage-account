@@ -73,27 +73,7 @@ resource "azurerm_storage_container" "storage" {
   container_access_type = var.containers[count.index].access_type
 }
 
-resource "azurerm_eventgrid_event_subscription" "storage" {
-  count = length(local.merged_events)
-  name  = local.merged_events[count.index].name
-  scope = azurerm_storage_account.storage.id
 
-  event_delivery_schema         = local.merged_events[count.index].event_delivery_schema
-  topic_name                    = local.merged_events[count.index].topic_name
-  labels                        = local.merged_events[count.index].labels
-  included_event_types          = local.merged_events[count.index].included_event_types
-  eventhub_endpoint_id          = local.merged_events[count.index].eventhub_id
-  service_bus_topic_endpoint_id = local.merged_events[count.index].service_bus_topic_id
-  service_bus_queue_endpoint_id = local.merged_events[count.index].service_bus_queue_id
-
-  dynamic "subject_filter" {
-    for_each = local.merged_events[count.index].filters == null ? [] : [true]
-    content {
-      subject_begins_with = lookup(local.merged_events[count.index].filters, "subject_begins_with", null) == null ? null : var.events[count.index].filters.subject_begins_with
-      subject_ends_with   = lookup(local.merged_events[count.index].filters, "subject_ends_with", null) == null ? null : var.events[count.index].filters.subject_ends_with
-    }
-  }
-}
 
 resource "azurerm_storage_management_policy" "storage" {
   count = length(var.lifecycles) == 0 ? 0 : 1
